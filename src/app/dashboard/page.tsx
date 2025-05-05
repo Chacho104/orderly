@@ -1,12 +1,20 @@
-import { getCurrentUser } from "../actions/auth/get-current-user";
+"use client";
 
-const Dashboard = async () => {
-  const currentUser = await getCurrentUser();
-  return (
-    <main>
-      <h1>{`Welcome, ${currentUser.name}`}</h1>
-    </main>
-  );
-};
+import { useEffect } from "react";
 
-export default Dashboard;
+import { onOpen } from "@/redux/features/modal/modal-slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
+export default function SetupPage() {
+  const dispatch = useAppDispatch();
+  const isOpen = useAppSelector((state) => state.modal.isOpen);
+
+  // Keep create store model open as long as there's no store associated with the user
+  useEffect(() => {
+    if (!isOpen) {
+      dispatch(onOpen());
+    }
+  }, [isOpen, dispatch]);
+
+  return null;
+}
